@@ -528,6 +528,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             historyMessages.clear()
         }
 
+         fun last2() {
+             modelChatState.value = ModelChatState.Ready
+             engine.unload()
+            messages.removeAt(messages.size-1)
+            report.value = ""
+            historyMessages.removeAt(historyMessages.size-1)
+        }
+
 
         private fun switchToResetting() {
             modelChatState.value = ModelChatState.Resetting
@@ -650,6 +658,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     Toast.makeText(application, "Initialize...", Toast.LENGTH_SHORT).show()
                 }
                 if (!callBackend {
+                    engine.unload()
                         engine.unload()
                         engine.reload(modelPath, modelConfig.modelLib)
                     }) return@submit
@@ -682,7 +691,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     var streamingText = ""
 
                     for (res in responses) {
-                        if (!callBackend {
+                        !callBackend {
                             for (choice in res.choices) {
                                 choice.delta.content?.let { content ->
                                     streamingText += content.asText()
@@ -701,7 +710,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                                 streamingText += " [output truncated due to context length limit...]"
                                 updateMessage(MessageRole.Assistant, streamingText)
                             }
-                        });
+                        }
                     }
                     if (streamingText.isNotEmpty()) {
                         historyMessages.add(ChatCompletionMessage(

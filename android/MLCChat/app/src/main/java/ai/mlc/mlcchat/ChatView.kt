@@ -250,7 +250,24 @@ fun SendMessageView(chatState: AppViewModel.ChatState) {
             modifier = Modifier
                 .aspectRatio(1f)
                 .weight(1f),
-            enabled = (text != "" && chatState.chatable())
+            enabled = (text != "" && chatState.chatable()) //TODO Hier
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Send,
+                contentDescription = "send message",
+            )
+        }
+
+        IconButton(
+            onClick = {
+                localFocusManager.clearFocus()
+                chatState.last2()
+                text = ""
+            },
+            modifier = Modifier
+                .aspectRatio(1f)
+                .weight(1f),
+            enabled = true //TODO Hier
         ) {
             Icon(
                 imageVector = Icons.Filled.Send,
